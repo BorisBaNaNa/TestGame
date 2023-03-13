@@ -26,10 +26,10 @@ public class PlayerWalkState : IState
 
     public void Exit()
     {
-        _player.SpawnPoint = _targetMovePos - Vector3.right * 10;
+        _player.SpawnPoint = _targetMovePos + Vector3.right * 10;
         Object.Destroy(_targetMove.gameObject);
         _player.CurrentAction = null;
-        //_player.TargetMove.gameObject.SetActive(false);
+        //_enemy.TargetMove.gameObject.SetActive(false);
     }
 
     IEnumerator WaitAndStartWalk(float time)

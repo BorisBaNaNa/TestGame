@@ -1,7 +1,9 @@
 using Cinemachine;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Boostraper : MonoBehaviour
 {
@@ -9,25 +11,45 @@ public class Boostraper : MonoBehaviour
     public GameStateMachine StateMachine;
 
     [SerializeField]
+    private bool IsMainBostraper;
+    [SerializeField]
+    private StartGameStates StartState;
+    [SerializeField]
     private PlayerController PlayerPrefub;
     [SerializeField]
     private GroundController GroundPrefub;
     [SerializeField]
     private BulletController BulletPrefub;
     [SerializeField]
-    private List<EnemyClassifier> Classifier;
+    private Image HeathBarPrefub;
+    [SerializeField]
+    private GameObject HeathBarParent;
+    [SerializeField]
+    private DamagePanel DamagePanelPrefub;
+    [SerializeField]
+    private GameObject DamagePanelParent;
     [SerializeField]
     private CinemachineVirtualCamera VirtualCamera;
+    [SerializeField]
+    private List<EnemyClassifier> Classifier;
 
     private void Awake()
     {
+        if (!IsMainBostraper && FindObjectsOfType(typeof(Boostraper)).Length > 1)
+        {
+            Debug.Log("Level boostraper has destroyed");
+            Destroy(gameObject);
+            return;
+        }
+
+        DontDestroyOnLoad(gameObject);
         Initialize();
         InitializeServices();
     }
 
     void Start()
     {
-        StateMachine = new GameStateMachine(VirtualCamera);
+        StateMachine = new GameStateMachine(VirtualCamera, StartState);
         StateMachine.StateSwitch<BoostraperState>();
     }
 
@@ -42,5 +64,7 @@ public class Boostraper : MonoBehaviour
         AllServices.RegisterService(new FactoryGround(GroundPrefub));
         AllServices.RegisterService(new FactoryBullet(BulletPrefub));
         AllServices.RegisterService(new FactoryEnemy(Classifier));
+        AllServices.RegisterService(new FactoryHeathBar(HeathBarPrefub, HeathBarParent));
+        AllServices.RegisterService(new FactoryDamagePanel(DamagePanelPrefub, DamagePanelParent));
     }
 }

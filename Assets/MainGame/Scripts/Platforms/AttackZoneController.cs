@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class AttackZoneController : MonoBehaviour
 {
@@ -42,7 +39,7 @@ public class AttackZoneController : MonoBehaviour
         return enemies;
     }
 
-    public void Respawn()
+    public void Reset()
     {
         GameObject attackPoint = new GameObject("AttackPoint");
         attackPoint.tag = "AttackPoint";

@@ -6,6 +6,11 @@ public enum EnemyType
     BaseEnemy,
 }
 
+public enum StartGameStates
+{
+    LoadLevelResourcesState,
+}
+
 [Serializable]
 public struct EnemyClassifier
 {

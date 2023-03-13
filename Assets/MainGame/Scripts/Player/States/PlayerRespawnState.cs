@@ -11,7 +11,7 @@ public class PlayerRespawnState : IState
 
     public void Enter()
     {
-        _stateMachine.Player.Respawn();
+        _stateMachine.Player.Spawn();
 
         _stateMachine.StateSwitch<PlayerWalkState>();
     }

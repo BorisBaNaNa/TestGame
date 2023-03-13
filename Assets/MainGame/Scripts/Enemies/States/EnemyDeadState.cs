@@ -12,6 +12,7 @@ public class EnemyDeadState : IState
     public void Enter()
     {
         _stateMachine.Enemy.Dead?.Invoke();
+        AllServices.GetService<LevelManager>().IncreaseGold(_stateMachine.Enemy.Cost);
         Object.Destroy(_stateMachine.Enemy.gameObject);
     }
 

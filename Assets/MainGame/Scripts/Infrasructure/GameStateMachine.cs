@@ -8,11 +8,11 @@ public class GameStateMachine : IStateSwitcher
     private readonly List<IState> _states;
     private IState _currentState;
 
-    public GameStateMachine(CinemachineVirtualCamera virtualCamera)
+    public GameStateMachine(CinemachineVirtualCamera virtualCamera, StartGameStates startState)
     {
         _states = new List<IState>
         {
-            new BoostraperState(this),
+            new BoostraperState(this, startState),
             new LoadLevelResoursesState(this, virtualCamera),
         };
     }

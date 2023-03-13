@@ -21,18 +21,17 @@ public class GroundSpawner : MonoBehaviour
     private float MultiplyerCost = 0.5f;
     [SerializeField]
     private float MinDistanceForSpawn = 3f;
-    [SerializeField]
-    private List<WaveInfo> WaveInfos;
 
     private Vector3 _spawnAria;
     private Collider _collider;
     private GameObject _enemiesParent;
+    private List<WaveInfo> _waveInfos;
     private int _enemyCount;
     private static int _currentSpawnCounter;
     private static int _currentWave = -1;
     private static float _heathBonus;
     private static float _damageBonus;
-    private static float _costBonus;
+    private static int _costBonus;
     private static EnemyType _currentEnemyType;
 
     private void Awake()
@@ -47,6 +46,8 @@ public class GroundSpawner : MonoBehaviour
 
         _enemiesParent = new GameObject("Enemies");
         _enemiesParent.transform.parent = transform;
+
+        _waveInfos = AllServices.GetService<LevelManager>().WaveInfos;
     }
 
     private void OnDestroy()
@@ -56,9 +57,9 @@ public class GroundSpawner : MonoBehaviour
 
     public void SpawnEnemies()
     {
-        if (WaveInfos.Count == 0)
+        if (_waveInfos.Count == 0) 
         {
-            Debug.LogWarning("WaveInfos is epmty!!!");
+            Debug.LogWarning("_waveInfos is epmty!!!");
             return;
         }
 
@@ -77,7 +78,7 @@ public class GroundSpawner : MonoBehaviour
         {
             _heathBonus += lastBuildEnemy.MaxHeath * MultiplyerHeath;
             _damageBonus += lastBuildEnemy.Damage * MultiplyerDamage;
-            _costBonus += lastBuildEnemy.Cost * MultiplyerCost;
+            _costBonus += Mathf.RoundToInt(lastBuildEnemy.Cost * MultiplyerCost);
         }
     }
 
@@ -85,7 +86,7 @@ public class GroundSpawner : MonoBehaviour
     {
         EnemyBase enemy = null;
         Vector3 spawnAriaCenter = _collider.bounds.center;
-        _enemyCount = WaveInfos[_currentWave].EnemyCount;
+        _enemyCount = _waveInfos[_currentWave].EnemyCount;
 
         List<Vector3> allSpawnedPositions = new List<Vector3>();
         for (int currenEnmyCount = 0; currenEnmyCount < _enemyCount; currenEnmyCount++)
@@ -96,7 +97,7 @@ public class GroundSpawner : MonoBehaviour
             } while (allSpawnedPositions.Exists(existPos => Vector3.Distance(existPos, enemyPos) < MinDistanceForSpawn));
             allSpawnedPositions.Add(enemyPos);
 
-            enemy = AllServices.GetService<FactoryEnemy>().BuildEnemy<EnemyBase>(EnemyType.BaseEnemy, enemyPos, true);
+            enemy = AllServices.GetService<FactoryEnemy>().BuildEnemy<EnemyBase>(_currentEnemyType, enemyPos, true);
             enemy.transform.parent = _enemiesParent.transform;
             enemy.MaxHeath += _heathBonus;
             enemy.Damage += _damageBonus;
@@ -118,15 +119,15 @@ public class GroundSpawner : MonoBehaviour
     {
         EnemyBase lastEnemy = null, currentEnemy;
         if (_currentWave >= 0)
-            lastEnemy = AllServices.GetService<FactoryEnemy>().GetEnemyPrefub<EnemyBase>(WaveInfos[_currentWave].Type);
+            lastEnemy = AllServices.GetService<FactoryEnemy>().GetEnemyPrefub<EnemyBase>(_waveInfos[_currentWave].Type);
 
-        if (++_currentWave >= WaveInfos.Count)
+        if (++_currentWave >= _waveInfos.Count)
             _currentWave = 0;
 
-        currentEnemy = AllServices.GetService<FactoryEnemy>().GetEnemyPrefub<EnemyBase>(WaveInfos[_currentWave].Type);
+        currentEnemy = AllServices.GetService<FactoryEnemy>().GetEnemyPrefub<EnemyBase>(_waveInfos[_currentWave].Type);
 
-        _currentEnemyType = WaveInfos[_currentWave].Type;
-        _currentSpawnCounter = WaveInfos[_currentWave].SpawnCount;
+        _currentEnemyType = _waveInfos[_currentWave].Type;
+        _currentSpawnCounter = _waveInfos[_currentWave].SpawnCount;
 
         LevelingStats(lastEnemy, currentEnemy);
     }

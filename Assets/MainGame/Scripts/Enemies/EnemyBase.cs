@@ -19,7 +19,7 @@ public class EnemyBase : MonoBehaviour, IDamageble
     public float AttackDistance = 1f;
     public float AttackCooldown = 1f;
     public float Damage = 5f;
-    public float Cost = 50f;
+    public int Cost = 5;
 
     private Transform _player;
     private Action _currentAction;
@@ -82,12 +82,6 @@ public class EnemyBase : MonoBehaviour, IDamageble
         return moveDir;
     }
 
-    private void RotateOnTarget(Vector3 dir)
-    {
-        Quaternion _targetRotation = Quaternion.LookRotation(dir);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, 0.5f);
-    }
-
     public virtual void Fighting()
     {
         if (Player.GetComponent<PlayerController>().CurrentHeath <= 0)
@@ -101,9 +95,9 @@ public class EnemyBase : MonoBehaviour, IDamageble
             AttackPlayer();
     }
 
-    private void AttackPlayer()
+    protected virtual void AttackPlayer()
     {
-        //Debug.Log("Attack Player!");
+        //Debug.Log("Attack _enemy!");
         IDamageble player = Player.GetComponent<IDamageble>();
         player.TakeDamage(Damage);
         _nextAttackTime = AttackCooldown + Time.time;
@@ -117,5 +111,11 @@ public class EnemyBase : MonoBehaviour, IDamageble
             _verticalVelocity += Physics.gravity * Time.deltaTime;
 
         _characterController.Move(_verticalVelocity * Time.deltaTime);
+    }
+
+    private void RotateOnTarget(Vector3 dir)
+    {
+        Quaternion _targetRotation = Quaternion.LookRotation(dir);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, 0.5f);
     }
 }

@@ -1,10 +1,9 @@
-﻿using System;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
+﻿using Unity.VisualScripting;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
+    public bool IsCrit { get => _isCrit; set => _isCrit = value; }
     public LayerMask EnemyLayerMask { get; set; }
     public float Damage { get; set; }
     public Transform Target { get; set; }
@@ -19,6 +18,7 @@ public class BulletController : MonoBehaviour
     private Vector3 _startPos;
     private float _flyHight = 0;
     private bool _targetDestroyed = false;
+    private bool _isCrit = false;
 
     private void Start()
     {
@@ -37,6 +37,11 @@ public class BulletController : MonoBehaviour
         {
             var enemy = other.transform.GetComponent<IDamageble>();
             enemy.TakeDamage(Damage);
+
+            Vector3 UIPos = other.GetComponent<EnemyUIController>().HeathBarPoint_.transform.position + Vector3.up * 0.5f;
+            DamagePanel damagePanel = AllServices.GetService<FactoryDamagePanel>().BuildDamagePanel(UIPos);
+            damagePanel.SetText(Mathf.FloorToInt(Damage).ToString(), IsCrit);
+
             DestroyThis();
             return;
         }

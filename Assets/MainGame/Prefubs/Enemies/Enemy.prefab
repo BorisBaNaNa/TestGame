@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1738121108698945418}
   - component: {fileID: 1738121108698945422}
   - component: {fileID: 1738121108698945421}
+  - component: {fileID: 3665686424762625622}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -31,7 +32,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1158640634603037241}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -118,9 +120,53 @@ MonoBehaviour:
   Dead:
     m_PersistentCalls:
       m_Calls: []
-  Heath: 100
+  MaxHeath: 100
   MoveSpeed: 5
-  AttackDistance: 4
+  AttackDistance: 2
   AttackCooldown: 1
-  Damage: 5
-  Cost: 50
+  Damage: 3
+  Cost: 10
+--- !u!114 &3665686424762625622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738121108698945416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d5f4704a6893c43b519d046d55e16f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HeathBarPoint: {fileID: 1158640634603037241}
+--- !u!1 &6617922673073867283
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1158640634603037241}
+  m_Layer: 7
+  m_Name: HeathPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1158640634603037241
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6617922673073867283}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.007, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1738121108698945420}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
